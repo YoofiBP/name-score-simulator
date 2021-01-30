@@ -4,6 +4,10 @@ import { useState, useEffect } from "react";
 import ExcelJS from "exceljs";
 import { CSVLink } from "react-csv";
 import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from 'react-bootstrap/Button'
 
 function App() {
   const [file, setFile] = useState(null);
@@ -12,7 +16,14 @@ function App() {
 
   const handleChange = (event) => {
     event.preventDefault();
-    setFile(event.target.files[0]);
+    if(event.target.files[0]){
+      const file = event.target.files[0]
+      if(file.size/1024 > 400) {
+        alert('File size must be below 200 kb');
+        return;
+      }
+      setFile(file);
+    }
   };
 
   const handleUpload = async (file) => {
@@ -36,25 +47,47 @@ function App() {
     setProcessed(false);
     setOutput([]);
     setFile(null);
+    window.location.reload();
   };
 
   const fileDownload = (
     <CSVLink data={output} onClick={resetState}>
-      Download me
+      <Button>
+      Download CSV
+      </Button>
     </CSVLink>
   );
 
   useEffect(() => {
     file && handleUpload(file);
+    console.log(file)
   }, [file]);
 
   return (
     <div className="App">
-      <input type="file" onChange={handleChange}></input>
-      <Form>
-        <Form.File id="custom-file" label="Custom file input" onChange={handleChange} custom />
-      </Form>
-      {isProcessed && output.length !== 0 && fileDownload}
+      <Container
+        className={"h-100 align-items-center justify-content-center"}
+      >
+        <Row>
+          <Col>
+            <h1>Name Score Simulator</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form className="mb-3">
+              <Form.File
+                id="custom-file"
+                label="Upload Excel file"
+                onChange={handleChange}
+                accept=".xls,.xlsx"
+                custom
+              />
+            </Form>
+          </Col>
+        </Row>
+        {isProcessed && output.length !== 0 && fileDownload}
+      </Container>
     </div>
   );
 }
