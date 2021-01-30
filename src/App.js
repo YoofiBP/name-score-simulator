@@ -51,7 +51,7 @@ function App() {
   };
 
   const fileDownload = (
-    <CSVLink data={output} onClick={resetState}>
+    <CSVLink filename="name_score_output" data={output} onClick={resetState}>
       <Button>
       Download CSV
       </Button>
