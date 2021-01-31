@@ -19,7 +19,7 @@ function App() {
     if(event.target.files[0]){
       const file = event.target.files[0]
       if(file.size/1024 > 400) {
-        alert('File size must be below 200 kb');
+        alert('File size must be below 400 kb');
         return;
       }
       setFile(file);
